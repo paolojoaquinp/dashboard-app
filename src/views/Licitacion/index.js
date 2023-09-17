@@ -1,13 +1,17 @@
 "use client"; // This is a client component 👈🏽
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { LicitacionContainer } from './licitacion-styles';
+
+import ScatterChart from '@/components/ScatterChart';
+import BarChart from '@/components/BarChart';
 
 function Licitacion() {
   const [licitaciones, setLicitaciones] = useState([]);
-
+  
   useEffect(() => {
     // Realizar una solicitud GET para obtener datos de la tabla "licitacion"
-    axios.get('http://192.168.1.2/proyecto_dashboard/index.php')
+    axios.get('http://localhost/proyecto_dashboard/index.php')
       .then(response => {
         const data = response.data;
         setLicitaciones(data);
@@ -15,11 +19,15 @@ function Licitacion() {
       .catch(error => {
         console.error('Error al obtener datos:', error);
       });
-  }, []); // El segundo argumento [] asegura que este efecto se ejecute solo una vez al montar el componente.
+  }, []);
 
   return (
-    <div>
-      <h1>Listado de Licitaciones</h1>
+    <LicitacionContainer>
+      <div className='charts__container'>
+        <ScatterChart />
+        <BarChart />
+      </div>
+      <h1 className='title'>Listado de Licitaciones</h1>
       <table>
         <thead>
           <tr>
@@ -50,7 +58,7 @@ function Licitacion() {
           ))}
         </tbody>
       </table>
-    </div>
+    </LicitacionContainer>
   );
 }
 

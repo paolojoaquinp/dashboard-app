@@ -1,3 +1,13 @@
-table {
-  border: 1px solid black;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --french-gray: #AAABBC;
+  --battleship-gray: #8B8982;
+  --blue-charcoal: #373F47;
+  --silver-blue: #6C91C2;
+  --periwinkle: #C3C9E9;
 }
