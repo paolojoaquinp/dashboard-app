@@ -5,11 +5,13 @@ import { LicitacionContainer } from './licitacion-styles';
 
 import ScatterChart from '@/components/ScatterChart';
 import BarChart from '@/components/BarChart';
-
+import BarChartContracts from '@/components/BarChartContracts';
+import { initialData } from '../../../initialData';
 function Licitacion() {
   const [licitaciones, setLicitaciones] = useState([]);
-  
+  const [data,setData] = useState([]);
   useEffect(() => {
+    setData(initialData);
     // Realizar una solicitud GET para obtener datos de la tabla "licitacion"
     axios.get('http://localhost/proyecto_dashboard/index.php')
       .then(response => {
@@ -24,8 +26,9 @@ function Licitacion() {
   return (
     <LicitacionContainer>
       <div className='charts__container'>
-        <ScatterChart />
-        <BarChart />
+        {/* <ScatterChart /> */}
+        {/* <BarChart /> */}
+        <BarChartContracts data={data}/>
       </div>
       <h1 className='title'>Listado de Licitaciones</h1>
       <table>
