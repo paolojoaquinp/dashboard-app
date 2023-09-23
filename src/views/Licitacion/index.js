@@ -27,6 +27,7 @@ function Licitacion() {
     <LicitacionContainer>
       <div className='charts__container'>
         <BarChartContracts data={data}/>
+        <hr></hr>
         <PieChartPAC data={dataPAC} />
       </div>
       <h1 className='title'>Listado de Licitaciones</h1>

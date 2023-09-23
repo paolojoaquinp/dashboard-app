@@ -6,10 +6,12 @@ export const LicitacionContainer = styled.div`
         padding: 50px 0;
     }
     .charts__container {
+        border: 1px solid gray;
+        padding: 16px;
+        border-radius: 12px;
         display: flex;
         flex-direction: row;
         gap: 15px;
-        height: 90%;
         > div {
             width: 50%;
         }

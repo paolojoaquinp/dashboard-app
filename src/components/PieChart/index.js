@@ -184,8 +184,8 @@ const PieChartPAC = ({ data }) => {
   return (
     <PieChart>
         <div className='chart__wrapper'>
-          <h2>Pie Chart - Nro de contratos(PROGRAMA ANUAL DE CONTRATACIONES)</h2>
-          <canvas id="detalleItemChart1" width="400" height="100"></canvas>
+          <h2>Nro de contratos(PROGRAMA ANUAL DE CONTRATACIONES)</h2>
+          <canvas id="detalleItemChart1" width="100" height="100"></canvas>
         </div>
         <hr></hr>
         <p>opciones:</p>
@@ -196,6 +196,7 @@ const PieChartPAC = ({ data }) => {
                 {opcionesSelect}
             </select>
           </div>
+          <hr></hr>
           <div className='select__wrapper'>
             <h3>Filtrar por año</h3>
             <select className='select__container' ref={selectYearRef} onChange={handleSelectChangeYear}>

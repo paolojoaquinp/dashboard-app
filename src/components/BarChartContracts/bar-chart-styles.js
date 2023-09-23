@@ -1,9 +1,10 @@
 import styled from "styled-components";
 
 export const BarChart = styled.div`
-    border: 1px solid gray;
+    /* border: 1px solid gray; */
     padding: 20px;
     border-radius: 12px;
+    width: 40%;
     .chart__wrapper {
         padding-bottom: 20px;
     }
