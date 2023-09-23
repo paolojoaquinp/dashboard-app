@@ -8,6 +8,8 @@ export const LicitacionContainer = styled.div`
     .charts__container {
         display: flex;
         flex-direction: row;
+        gap: 15px;
+        height: 90%;
         > div {
             width: 50%;
         }

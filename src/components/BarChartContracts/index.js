@@ -1,27 +1,74 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
+import { BarChart } from './bar-chart-styles';
 
 
 let chart;
 
-function BarChartContracts({ data }) {
+const BarChartContracts = ({ data }) => {
+  const selectRef = useRef(null);
+  const [opcionesSelect, setOpcionesSelect] = useState([]);
+  const [selected, setSelected] = useState(NaN);
+
+
+  const handleSelectChange = () => {
+    setSelected(selectRef.current.value);
+    console.log('Valor seleccionado:', selected);
+  };
+
+  useEffect(() => {
+    const opciones = [];
+    const añosUnicos = data.reduce((años, item) => {
+      const año = item.fecha_resolucion.getFullYear();
+      if (!años.includes(año)) {
+        años.push(año);
+      }
+      return años;
+    }, []);
+    añosUnicos.forEach(item => {
+      console.log('fecha: ',item);
+      opciones.push(
+        <option key={item} value={item}>
+          {item}
+        </option>
+      );
+    });
+    setOpcionesSelect(opciones);
+  },[data]);
+
   useEffect(() => { 
     const ctx = document.getElementById('detalleItemChart').getContext('2d');
 
     const categoryCounts = {};
+
     data.forEach(item => {
+      const year = item.fecha_resolucion.getFullYear().toString();
+    
+      // Verificar si 'selectedYear' es un número válido (no es NaN)
+      if (!isNaN(selected)) {
+        if (year === selected.toString()) {
+          const category = item.causante_entidad;
+          if (categoryCounts[category]) {
+            categoryCounts[category] += 1;
+          } else {
+            categoryCounts[category] = 1;
+          }
+        }
+      } else {
+        // Si 'selectedYear' es NaN, contar todos los elementos sin filtrar por año
         const category = item.causante_entidad;
         if (categoryCounts[category]) {
-            categoryCounts[category] += 1;
+          categoryCounts[category] += 1;
         } else {
-            categoryCounts[category] = 1;
+          categoryCounts[category] = 1;
         }
+      }
     });
 
-    // Tomar las 10 categorías más frecuentes
+
     const arrayDataValor = Object.keys(categoryCounts).map(key => ({
-    key: key,
-    value: categoryCounts[key]
+      key: key,
+      value: categoryCounts[key]
     }));
       console.log(arrayDataValor);
     const chartData = {
@@ -30,8 +77,22 @@ function BarChartContracts({ data }) {
           {
             label: 'Nro contratos resueltos',
             data: arrayDataValor.map(category => category.value),
-            backgroundColor: 'rgba(75, 192, 192, 0.2)', // Color de las barras
-            borderColor: 'rgba(75, 192, 192, 1)', // Color del borde de las barras
+            backgroundColor: [
+              'rgba(255, 159, 64, 0.2)',
+              'rgba(255, 205, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(201, 203, 207, 0.2)'
+            ],
+            borderColor: [
+              'rgb(255, 159, 64)',
+              'rgb(255, 205, 86)',
+              'rgb(75, 192, 192)',
+              'rgb(54, 162, 235)',
+              'rgb(153, 102, 255)',
+              'rgb(201, 203, 207)'
+            ],
             borderWidth: 1,
           },
         ],
@@ -64,13 +125,23 @@ function BarChartContracts({ data }) {
         
     }
 
-  }, [data]);
+  }, [data,selected]);
 
   return (
-    <div>
-        <h2>Gráfico de Barras - Causa de Resolucion de contratos</h2>
-        <canvas id="detalleItemChart" width="400" height="200"></canvas>
-    </div>
+    <BarChart>
+        <div className='chart__wrapper'>
+          <h2>Gráfico de Barras - Causa de Resolucion de contratos</h2>
+          <canvas id="detalleItemChart" width="400" height="300"></canvas>
+        </div>
+        <hr></hr>
+        <p>opciones:</p>
+        <div className='select__wrapper'>
+          <h3>Filtrar por año</h3>
+          <select className='select__container' ref={selectRef} onChange={handleSelectChange}>
+              {opcionesSelect}
+          </select>
+        </div>
+    </BarChart>
   );
 }
 
