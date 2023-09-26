@@ -25,12 +25,13 @@ function Licitacion() {
 
   return (
     <LicitacionContainer>
+      <h1>Dashboard</h1>
       <div className='charts__container'>
         <BarChartContracts data={data}/>
         <hr></hr>
         <PieChartPAC data={dataPAC} />
       </div>
-      <h1 className='title'>Listado de Licitaciones</h1>
+     {/*  <h1 className='title'>Listado de Licitaciones</h1>
       <table>
         <thead>
           <tr>
@@ -60,7 +61,7 @@ function Licitacion() {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table> */}
     </LicitacionContainer>
   );
 }

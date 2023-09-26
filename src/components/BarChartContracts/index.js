@@ -8,7 +8,7 @@ let chart;
 const BarChartContracts = ({ data }) => {
   const selectRef = useRef(null);
   const [opcionesSelect, setOpcionesSelect] = useState([]);
-  const [selected, setSelected] = useState(NaN);
+  const [selected, setSelected] = useState('');
 
 
   const handleSelectChange = () => {
@@ -19,7 +19,8 @@ const BarChartContracts = ({ data }) => {
   useEffect(() => {
     const opciones = [];
     const añosUnicos = data.reduce((años, item) => {
-      const año = item.fecha_resolucion.getFullYear();
+      /* const año = item.fecha_resolucion.getFullYear(); */
+      const año = item.causante_entidad;
       if (!años.includes(año)) {
         años.push(año);
       }
@@ -42,12 +43,12 @@ const BarChartContracts = ({ data }) => {
     const categoryCounts = {};
 
     data.forEach(item => {
-      const year = item.fecha_resolucion.getFullYear().toString();
+      /* const year = item.fecha_resolucion.getFullYear().toString(); */
+      const year = item.causante_entidad;
     
-      // Verificar si 'selectedYear' es un número válido (no es NaN)
-      if (!isNaN(selected)) {
+      if (selected) {
         if (year === selected.toString()) {
-          const category = item.causante_entidad;
+          const category = item.entidad_contratante;
           if (categoryCounts[category]) {
             categoryCounts[category] += 1;
           } else {
@@ -55,8 +56,7 @@ const BarChartContracts = ({ data }) => {
           }
         }
       } else {
-        // Si 'selectedYear' es NaN, contar todos los elementos sin filtrar por año
-        const category = item.causante_entidad;
+        const category = item.entidad_contratante;
         if (categoryCounts[category]) {
           categoryCounts[category] += 1;
         } else {
@@ -136,7 +136,7 @@ const BarChartContracts = ({ data }) => {
         <hr></hr>
         <p>opciones:</p>
         <div className='select__wrapper'>
-          <h3>Filtrar por año</h3>
+          <h3>Filtrar por Causal de resolucion</h3>
           <select className='select__container' ref={selectRef} onChange={handleSelectChange}>
               {opcionesSelect}
           </select>

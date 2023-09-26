@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const PieChart = styled.div`
-    /* border: 1px solid gray; */
+    width:40%;
     padding: 20px;
     border-radius: 12px;
     .chart__wrapper {
@@ -12,16 +12,17 @@ export const PieChart = styled.div`
     }
     .options__wrapper {
         display: flex;
-        flex-direction: row;
-        gap: 14px;
+        flex-direction: column;
         .select__wrapper {
             margin-top: 30px;
+            overflow-y:scroll;
+            overflow:hidden;
             > h3 {
                 margin-bottom: 10px;
             }
                 .select__container {
                     background-color: white;
-                    width: 100px;
+                    width: 250px;
                     height: 40px;
                     border: 1px solid black;
                     border-radius: 12px;

@@ -7,27 +7,37 @@ let chart1;
 
 const PieChartPAC = ({ data }) => {
   const selectRef = useRef(null);
+  const selectEntityRef = useRef(null);
   const selectYearRef = useRef(null);
+  
   const [opcionesSelect, setOpcionesSelect] = useState([]);
   const [selected, setSelected] = useState('');
   
+  const [opcionesEntitySelect, setOpcionesEntitySelect] = useState([]);
+  const [selectedEntity, setSelectedEntity] = useState('');
+
   const [opcionesYearSelect, setOpcionesYearSelect] = useState([]);
   const [selectedYear, setSelectedYear] = useState(NaN);
 
 
   const handleSelectChange = () => {
     setSelected(selectRef.current.value);
-    console.log('Valor seleccionado:', selected);
+  };
+  const handleSelectChangeEntity = () => {
+    setSelectedEntity(selectEntityRef.current.value);
   };
   const handleSelectChangeYear = () => {
     setSelectedYear(selectYearRef.current.value);
-    console.log('Valor seleccionado:', selectedYear);
   };
 
   useEffect(() => {
     // Departamentos
 
-    const opciones = [];
+    const opciones = [
+      <option key={''} value={''}>
+          {'Elige un departamento'}
+      </option>
+    ];
     const deptoUnicos = data.reduce((deptos, item) => {
       const depto = item.departamento;
       if (!deptos.includes(depto)) {
@@ -47,12 +57,16 @@ const PieChartPAC = ({ data }) => {
   },[data,]);
 
   useEffect(() => {
-    // Years
-    const opcionesYears = [];
+    // Entidad
+    const opcionesEntity = [
+      <option key={''} value={''}>
+          {'Elige una entidad'}
+      </option>
+    ];
     let añosUnicos = [];
     if(!selected) {
       añosUnicos = data.reduce((años, item) => {
-        const año = item.fecha_ultima_publicacion.getFullYear().toString();
+        const año = item.entidad;
         if (!años.includes(año)) {
           años.push(año);
         }
@@ -61,7 +75,7 @@ const PieChartPAC = ({ data }) => {
     } else {
       añosUnicos = data.reduce((años, item) => {
         const depto = item.departamento;
-        const año = item.fecha_ultima_publicacion.getFullYear().toString();
+        const año = item.entidad;
         if (!años.includes(año) && depto === selected) {
           años.push(año);
         }
@@ -70,6 +84,41 @@ const PieChartPAC = ({ data }) => {
     }
     añosUnicos.forEach(item => {
       console.log('fecha: ',item);
+      opcionesEntity.push(
+        <option key={item} value={item}>
+          {item}
+        </option>
+      );
+    });
+    setOpcionesEntitySelect(opcionesEntity);
+
+    // Years
+    const opcionesYears = [
+      <option key={''} value={''}>
+          {'Elige un Año'}
+      </option>
+    ];
+    let uniqueYears = [];
+    if(!selected && !selectedEntity) {
+      uniqueYears = data.reduce((años, item) => {
+        const año = item.fecha_ultima_publicacion.getFullYear().toString();
+        if (!años.includes(año)) {
+          años.push(año);
+        }
+        return años;
+      }, []);
+    } else {
+      uniqueYears = data.reduce((años, item) => {
+        const depto = item.departamento;
+        const entity = item.entidad;
+        const año = item.fecha_ultima_publicacion.getFullYear().toString();
+        if (!años.includes(año) && depto === selected && entity === selectedEntity) {
+          años.push(año);
+        }
+        return años;
+      }, []);
+    }
+    uniqueYears.forEach(item => {
       opcionesYears.push(
         <option key={item} value={item}>
           {item}
@@ -77,7 +126,7 @@ const PieChartPAC = ({ data }) => {
       );
     });
     setOpcionesYearSelect(opcionesYears);
-  },[selected,data]);
+  },[selected,selectedEntity,data]);
 
   useEffect(() => { 
     const ctx = document.getElementById('detalleItemChart1').getContext('2d');
@@ -87,9 +136,35 @@ const PieChartPAC = ({ data }) => {
     data.forEach(item => {
       const depto = item.departamento;
       const year = item.fecha_ultima_publicacion.getFullYear().toString();
-    
-      // Verificar si 'selectedYear' es un número válido (no es NaN)
-      if ((selected) && !isNaN(selectedYear)) {
+      const entidad = item.entidad;
+
+      if (selected && selectedEntity && !isNaN(selectedYear)) {
+        if(selected === 'default' || selectedEntity === 'default') {
+          const category = item.municipio;
+          if (categoryCounts[category]) {
+            categoryCounts[category] += 1;
+          } else {
+            categoryCounts[category] = 1;
+          }
+        }
+        if (depto === selected && entidad === selectedEntity && year === selectedYear) {
+          const category = item.municipio;
+          if (categoryCounts[category]) {
+            categoryCounts[category] += 1;
+          } else {
+            categoryCounts[category] = 1;
+          }
+        }
+      } else if (selected && selectedEntity) {
+        if (depto === selected && entidad === selectedEntity) {
+          const category = item.municipio;
+          if (categoryCounts[category]) {
+            categoryCounts[category] += 1;
+          } else {
+            categoryCounts[category] = 1;
+          }
+        }
+      } else if (selected && selectedYear) {
         if (depto === selected && year === selectedYear) {
           const category = item.municipio;
           if (categoryCounts[category]) {
@@ -98,8 +173,16 @@ const PieChartPAC = ({ data }) => {
             categoryCounts[category] = 1;
           }
         }
-      } 
-      if(selected && isNaN(selectedYear)) {
+      } else if (selectedEntity && selectedYear) {
+        if (entidad === selectedEntity && year === selectedYear) {
+          const category = item.municipio;
+          if (categoryCounts[category]) {
+            categoryCounts[category] += 1;
+          } else {
+            categoryCounts[category] = 1;
+          }
+        }
+      } else if (selected) {
         if (depto === selected) {
           const category = item.municipio;
           if (categoryCounts[category]) {
@@ -108,8 +191,16 @@ const PieChartPAC = ({ data }) => {
             categoryCounts[category] = 1;
           }
         }
-      }
-      if(!selected && !isNaN(selectedYear)) {
+      } else if (selectedEntity) {
+        if (entidad === selectedEntity) {
+          const category = item.municipio;
+          if (categoryCounts[category]) {
+            categoryCounts[category] += 1;
+          } else {
+            categoryCounts[category] = 1;
+          }
+        }
+      } else if (selectedYear) {
         if (year === selectedYear) {
           const category = item.municipio;
           if (categoryCounts[category]) {
@@ -118,15 +209,17 @@ const PieChartPAC = ({ data }) => {
             categoryCounts[category] = 1;
           }
         }
-      }
-      if(!(selected) && isNaN(selectedYear)) {
-          const category = item.municipio;
-          if (categoryCounts[category]) {
-            categoryCounts[category] += 1;
-          } else {
-            categoryCounts[category] = 1;
-          }
+      } else {
+        // Ninguno de los props está definido
+        // Hacer algo cuando ninguno está definido
+        const category = item.municipio;
+        if (categoryCounts[category]) {
+          categoryCounts[category] += 1;
+        } else {
+          categoryCounts[category] = 1;
         }
+      }
+
     });
 
 
@@ -162,7 +255,10 @@ const PieChartPAC = ({ data }) => {
         ],
     };
 
-    const chartOptions = {};
+    const chartOptions = {
+    };
+
+
     if (chart1) {
         chart1.destroy();
         chart1 = new Chart(ctx, {
@@ -179,12 +275,12 @@ const PieChartPAC = ({ data }) => {
         
     }
 
-  }, [data,selected,selectedYear]);
+  }, [data,selected,selectedEntity,selectedYear]);
 
   return (
     <PieChart>
         <div className='chart__wrapper'>
-          <h2>Nro de contratos(PROGRAMA ANUAL DE CONTRATACIONES)</h2>
+          <h2>PROGRAMA ANUAL DE CONTRATACIONES</h2>
           <canvas id="detalleItemChart1" width="100" height="100"></canvas>
         </div>
         <hr></hr>
@@ -196,7 +292,12 @@ const PieChartPAC = ({ data }) => {
                 {opcionesSelect}
             </select>
           </div>
-          <hr></hr>
+          <div className='select__wrapper'>
+            <h3>Filtrar por Entidad</h3>
+            <select className='select__container' ref={selectEntityRef} onChange={handleSelectChangeEntity}>
+                {opcionesEntitySelect}
+            </select>
+          </div>
           <div className='select__wrapper'>
             <h3>Filtrar por año</h3>
             <select className='select__container' ref={selectYearRef} onChange={handleSelectChangeYear}>

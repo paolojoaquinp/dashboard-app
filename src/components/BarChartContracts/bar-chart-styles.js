@@ -4,9 +4,10 @@ export const BarChart = styled.div`
     /* border: 1px solid gray; */
     padding: 20px;
     border-radius: 12px;
-    width: 40%;
+    width: 60%;
     .chart__wrapper {
         padding-bottom: 20px;
+        overflow:scroll;
     }
     p {
         font-size: 10px;
@@ -18,7 +19,7 @@ export const BarChart = styled.div`
         }
         .select__container {
             background-color: white;
-            width: 100px;
+            width: 200px;
             height: 40px;
             border: 1px solid black;
             border-radius: 12px;
