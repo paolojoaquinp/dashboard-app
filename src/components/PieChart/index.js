@@ -9,6 +9,8 @@ const PieChartPAC = ({ data }) => {
   const selectRef = useRef(null);
   const selectEntityRef = useRef(null);
   const selectYearRef = useRef(null);
+
+  const [currentContracts,setCurrentContracts] = useState([]);
   
   const [opcionesSelect, setOpcionesSelect] = useState([]);
   const [selected, setSelected] = useState('');
@@ -227,7 +229,7 @@ const PieChartPAC = ({ data }) => {
       key: key,
       value: categoryCounts[key]
     }));
-      console.log(arrayDataValor);
+
     const chartData = {
         labels: arrayDataValor.map(item => item.key),
         datasets: [
@@ -254,6 +256,10 @@ const PieChartPAC = ({ data }) => {
           },
         ],
     };
+    
+    const res = arrayDataValor.reduce((accum,current) => accum + current.value,0);
+    setCurrentContracts(res);
+    
 
     const chartOptions = {
     };
@@ -280,7 +286,14 @@ const PieChartPAC = ({ data }) => {
   return (
     <PieChart>
         <div className='chart__wrapper'>
-          <h2>PROGRAMA ANUAL DE CONTRATACIONES</h2>
+          <div className='info__wrapper'>
+            <h2>PROGRAMA ANUAL DE CONTRATACIONES</h2>
+            <div className='quantity__info-wrapper'>
+              <p>Total:</p>
+              <p>{selected === '' ? data.length : currentContracts}</p>
+              <p>Contrataciones</p>
+            </div>
+          </div>
           <canvas id="detalleItemChart1" width="100" height="100"></canvas>
         </div>
         <hr></hr>

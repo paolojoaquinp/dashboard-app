@@ -19,7 +19,7 @@ export const BarChart = styled.div`
         }
         .select__container {
             background-color: white;
-            width: 200px;
+            width: 60%;
             height: 40px;
             border: 1px solid black;
             border-radius: 12px;

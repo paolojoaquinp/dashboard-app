@@ -7,6 +7,7 @@ let chart;
 
 const BarChartContracts = ({ data }) => {
   const selectRef = useRef(null);
+  const [totalCount,setTotalCount] = useState(0);
   const [opcionesSelect, setOpcionesSelect] = useState([]);
   const [selected, setSelected] = useState('');
 
@@ -20,14 +21,13 @@ const BarChartContracts = ({ data }) => {
     const opciones = [];
     const añosUnicos = data.reduce((años, item) => {
       /* const año = item.fecha_resolucion.getFullYear(); */
-      const año = item.causante_entidad;
+      const año = item.entidad_contratante;
       if (!años.includes(año)) {
         años.push(año);
       }
       return años;
     }, []);
     añosUnicos.forEach(item => {
-      console.log('fecha: ',item);
       opciones.push(
         <option key={item} value={item}>
           {item}
@@ -44,11 +44,11 @@ const BarChartContracts = ({ data }) => {
 
     data.forEach(item => {
       /* const year = item.fecha_resolucion.getFullYear().toString(); */
-      const year = item.causante_entidad;
+      const year = item.entidad_contratante;
     
       if (selected) {
         if (year === selected.toString()) {
-          const category = item.entidad_contratante;
+          const category = item.causal;
           if (categoryCounts[category]) {
             categoryCounts[category] += 1;
           } else {
@@ -56,7 +56,7 @@ const BarChartContracts = ({ data }) => {
           }
         }
       } else {
-        const category = item.entidad_contratante;
+        const category = item.causal;
         if (categoryCounts[category]) {
           categoryCounts[category] += 1;
         } else {
@@ -98,6 +98,8 @@ const BarChartContracts = ({ data }) => {
         ],
     };
 
+    setTotalCount(arrayDataValor.reduce((accum,current) => accum + current.value,0));
+
     const chartOptions = {
         scales: {
           y: {
@@ -131,12 +133,17 @@ const BarChartContracts = ({ data }) => {
     <BarChart>
         <div className='chart__wrapper'>
           <h2>Gráfico de Barras - Causa de Resolucion de contratos</h2>
+          <div>
+            <p>Total: </p>
+            <h4>{totalCount}</h4>
+
+          </div>
           <canvas id="detalleItemChart" width="400" height="300"></canvas>
         </div>
         <hr></hr>
         <p>opciones:</p>
         <div className='select__wrapper'>
-          <h3>Filtrar por Causal de resolucion</h3>
+          <h3>Filtrar por Proponente</h3>
           <select className='select__container' ref={selectRef} onChange={handleSelectChange}>
               {opcionesSelect}
           </select>

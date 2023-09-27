@@ -6,6 +6,17 @@ export const PieChart = styled.div`
     border-radius: 12px;
     .chart__wrapper {
         padding-bottom: 20px;
+        .info__wrapper {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            .quantity__info-wrapper {
+                p:nth-child(2) {
+                    font-size: 20px;
+                    font-weight: bold;
+                }
+            }       
+        }
     }
     p {
         font-size: 10px;
@@ -22,7 +33,7 @@ export const PieChart = styled.div`
             }
                 .select__container {
                     background-color: white;
-                    width: 250px;
+                    width: 80%;
                     height: 40px;
                     border: 1px solid black;
                     border-radius: 12px;
