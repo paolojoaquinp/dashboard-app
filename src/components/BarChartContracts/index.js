@@ -21,7 +21,7 @@ const BarChartContracts = ({ data }) => {
     const opciones = [];
     const añosUnicos = data.reduce((años, item) => {
       /* const año = item.fecha_resolucion.getFullYear(); */
-      const año = item.entidad_contratante;
+      const año = item.empresa_persona;
       if (!años.includes(año)) {
         años.push(año);
       }
@@ -44,7 +44,7 @@ const BarChartContracts = ({ data }) => {
 
     data.forEach(item => {
       /* const year = item.fecha_resolucion.getFullYear().toString(); */
-      const year = item.entidad_contratante;
+      const year = item.empresa_persona;
     
       if (selected) {
         if (year === selected.toString()) {

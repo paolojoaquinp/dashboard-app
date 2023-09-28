@@ -62,7 +62,7 @@ const PieChartPAC = ({ data }) => {
     // Entidad
     const opcionesEntity = [
       <option key={''} value={''}>
-          {'Elige una entidad'}
+          {'Elige un proponente'}
       </option>
     ];
     let añosUnicos = [];
@@ -306,7 +306,7 @@ const PieChartPAC = ({ data }) => {
             </select>
           </div>
           <div className='select__wrapper'>
-            <h3>Filtrar por Entidad</h3>
+            <h3>Filtrar por Proponente</h3>
             <select className='select__container' ref={selectEntityRef} onChange={handleSelectChangeEntity}>
                 {opcionesEntitySelect}
             </select>
